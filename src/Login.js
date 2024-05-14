@@ -7,18 +7,49 @@ import {
   View,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import * as SecureStore from 'expo-secure-store';
+
 import { violet } from "./Constant";
 import MainContainer from "./MainContainer";
 
 const Login = (props) => {
+  const setToken = (token) => {
+    return SecureStore.setItemAsync('secure_token', token);
+};
+
+const getToken = () => {
+    return SecureStore.getItemAsync('secure_token');
+};
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+//   function handleSubmit(e) {
+//     e.preventDefault();
 
-  const handleLogin = () => {
-    // Implement your login logic here
-    // For simplicity, I'll just navigate to MainContainer
-    props.navigation.navigate("MainContainer");
-  };
+//     fetch("http://24.10.0.209:8085/api/auth/authenticate", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       "email": email,
+//       "password": password,
+//     }),
+// })
+//       .then((response) => response.json())
+//       .then((data) => {
+//         if (data.token) {
+//           setToken(data.token);
+//             console.log(getToken());
+//             // Navigate to MainContainer
+//             props.navigation.navigate("MainContainer");
+        
+//         } else {
+//           console.log(data.message);
+//         }
+//       })
+//       .catch((error) => console.log(error));
+//   }
+
 
   return (
     <LinearGradient colors={["#7C4CEC", "#FFFFFF"]} style={styles.container}>
@@ -49,7 +80,7 @@ const Login = (props) => {
               <Text style={styles.txtForgotPswd}>Forgot Password?</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <LinearGradient
               colors={["#54B5F4", "#7C4CEC"]}
               style={styles.buttonGradient}

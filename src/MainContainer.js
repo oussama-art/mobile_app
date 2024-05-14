@@ -11,11 +11,9 @@ const Tab = createMaterialBottomTabNavigator();
 
 const MainContainer = () => {
   const Header = () => (
-    <LinearGradient colors={["#7C4CEC", "#FFFFFF"]} style={styles.headerContainer}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Blog</Text>
+        <Text style={styles.headerText}>Voyage</Text>
       </View>
-    </LinearGradient>
   );
 
   return (
@@ -25,27 +23,25 @@ const MainContainer = () => {
         initialRouteName="Home"
         activeColor="white"
         inactiveColor="white"
-        barStyle={{paddingLeft:30,paddingRight:30,marginBottom:10,marginTop:10,marginLeft:10,marginRight:10,backgroundColor:'#7C4CEC', borderRadius:30}}
+        barStyle={{backgroundColor:'gray'}}
       >
         <Tab.Screen
           name="Home"
           component={Home}
-
+        
           options={{
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons name="home" color={focused ? "#7C4CEC" : "white"} size={26} />
+              <MaterialCommunityIcons name="home" color={focused ? "white" : "white"} size={26} />
             ),
-            tabBarStyle: { backgroundColor: 'blue' },
           }}
         />
         <Tab.Screen
-          name="AddPost"
-          component={AddPost}
+          name="reservation"
+          component={AddPost} 
           options={{
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons name="plus-circle" color={focused ? "#7C4CEC" : "white"} size={26} />
+              <MaterialCommunityIcons name="plus-circle" color={focused ? "white" : "white"} size={26} />
             ),
-            tabBarStyle: { backgroundColor: 'blue' },
           }}
         />
         <Tab.Screen
@@ -53,7 +49,7 @@ const MainContainer = () => {
           component={Profile}
           options={{
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons name="account" color={focused ? "#7C4CEC" : "white"} size={26} />
+              <MaterialCommunityIcons name="account" color={focused ? "white" : "white"} size={26} />
             ),
           }}
         />
@@ -65,18 +61,17 @@ const MainContainer = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'white',
+    backgroundColor:'gray',
 
   },
   headerContainer: {
 
   },
   header: {
-    backgroundColor: 'rgba(255,255,255,0.6)',
     alignItems: 'center',
   },
   headerText: {
-    color: '#7C4CEC',
+    color: '#FFFFFF',
     fontSize: 27,
     fontWeight: 'bold',
     paddingTop:20,
