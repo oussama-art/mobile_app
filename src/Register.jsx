@@ -13,7 +13,18 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
 import * as SecureStore from 'expo-secure-store';
+async function save(value) {
+  await SecureStore.setItemAsync('secure_token', value);
+}
 
+async function getValueFor() {
+  let result = await SecureStore.getItemAsync('secure_token');
+  if (result) {
+    alert("🔐 Here's your value 🔐 \n" + result);
+  } else {
+    alert('No values stored under that key.');
+  }
+}
 export default function Signup(props) {
 
   const savetoken = async (token )=>{
@@ -57,7 +68,7 @@ export default function Signup(props) {
     formData.append('firstname', firstName);
     formData.append('lastname', lastName);
      
-    fetch("http://24.20.0.232:8085/api/auth/register", {
+    fetch("http://192.168.1.10:8085/api/auth/register", {
       method: "POST",
       body: formData,
     })
@@ -67,10 +78,13 @@ export default function Signup(props) {
         console.log(data.token);
 
         if (data.token) {
-            savetoken(data.token);
-            console.table(gettoken());
-          //// Navigate to MainContainer
-          //props.navigation.navigate("MainContainer");
+          savetoken(data.token);
+          gettoken()
+          .then(token => {
+            console.log(token); // daba rah tiji token 
+          });
+          
+          props.navigation.navigate("MainContainer");
         } else {
           console.log(data.message);
         }
