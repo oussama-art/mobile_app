@@ -10,9 +10,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as SecureStore from 'expo-secure-store';
 
 const Login = (props) => {
-  const setToken = (token) => {
-    return SecureStore.setItemAsync('secure_token', token);
-  };
+    const setToken = (token) => {
+      return SecureStore.setItemAsync('secure_token', token);
+    };
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

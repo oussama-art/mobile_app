@@ -12,15 +12,16 @@ import {
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
+import * as SecureStore from 'expo-secure-store';
 
-export default function ImagePickerExample(props) {
-  const setToken = (token) => {
-    return SecureStore.setItemAsync('secure_token', token);
-  };
+export default function Signup(props) {
 
-  const getToken = () => {
-    return SecureStore.getItemAsync('secure_token');
-  };
+  const savetoken = async (token )=>{
+    await SecureStore.setItemAsync('secure_token',token);
+  }
+  const gettoken = async()=>{
+    return await SecureStore.getItemAsync('secure_token');
+  }
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,34 +56,26 @@ export default function ImagePickerExample(props) {
     formData.append('password', password);
     formData.append('firstname', firstName);
     formData.append('lastname', lastName);
-    formData.append('image', image);
-  
-    fetch("http://192.168.137.16:8085/api/auth/register", {
+     
+    fetch("http://24.20.0.232:8085/api/auth/register", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: formData,
     })
-      .then((response) => {
-        console.log(response)
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        console.log(data.token);
+
         if (data.token) {
-          setToken(data.token);
-          console.log(getToken());
-          // Navigate to MainContainer
-          props.navigation.navigate("MainContainer");
+            savetoken(data.token);
+            console.table(gettoken());
+          //// Navigate to MainContainer
+          //props.navigation.navigate("MainContainer");
         } else {
           console.log(data.message);
         }
       })
-      .catch((error) => console.error('Error:', error));
+      .catch((error) => console.log(error));
   }
   
   return (

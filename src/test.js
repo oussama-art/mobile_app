@@ -313,3 +313,6 @@ const pickImage = async () => {
       setImage(result.assets[0].uri);
     }
   };
+
+
+  
