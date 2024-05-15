@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,55 +9,43 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import * as SecureStore from 'expo-secure-store';
 
-import { violet } from "./Constant";
-import MainContainer from "./MainContainer";
-
 const Login = (props) => {
   const setToken = (token) => {
     return SecureStore.setItemAsync('secure_token', token);
-};
+  };
 
-const getToken = () => {
-    return SecureStore.getItemAsync('secure_token');
-};
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-//   function handleSubmit(e) {
-//     e.preventDefault();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-//     fetch("http://24.10.0.209:8085/api/auth/authenticate", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       "email": email,
-//       "password": password,
-//     }),
-// })
-//       .then((response) => response.json())
-//       .then((data) => {
-//         if (data.token) {
-//           setToken(data.token);
-//             console.log(getToken());
-//             // Navigate to MainContainer
-//             props.navigation.navigate("MainContainer");
-        
-//         } else {
-//           console.log(data.message);
-//         }
-//       })
-//       .catch((error) => console.log(error));
-//   }
-
+  const handleSubmit = () => {
+    fetch("http://192.168.137.16:8085/api/auth/authenticate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.token) {
+        setToken(data.token);
+        props.navigation.navigate("MainContainer");
+      } else {
+        console.log(data.message || "Failed Login");
+      }
+    })
+    .catch(error => console.log(error));
+  }
 
   return (
     <LinearGradient colors={["#7C4CEC", "#FFFFFF"]} style={styles.container}>
-      <View style={styles.c2}>
-        <Text style={styles.txtW}>Login</Text>
-        <View style={styles.c3}>
-          <Text style={styles.txtV}>Welcome Back</Text>
-          <Text style={styles.txtG}>Login to your account</Text>
+      <View style={styles.contentContainer}>
+        <Text style={styles.title}>Login</Text>
+        <View style={styles.formContainer}>
+        
           <TextInput
             style={styles.input}
             placeholder="Email / Username"
@@ -74,142 +62,106 @@ const getToken = () => {
           />
           <TouchableOpacity
             onPress={() => props.navigation.navigate("ForgotPassword")}
-            style={styles.forgotPswdContainer}
+            style={styles.forgotPasswordButton}
           >
-            <View style={{ alignItems: "flex-end" }}>
-              <Text style={styles.txtForgotPswd}>Forgot Password?</Text>
-            </View>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <LinearGradient
-              colors={["#54B5F4", "#7C4CEC"]}
-              style={styles.buttonGradient}
-              start={{ x: 0, y: 0 }} // From left
-              end={{ x: 1, y: 0 }} // To right
-            >
+            <View style={styles.buttonGradient}>
               <Text style={styles.buttonText}>Login</Text>
-            </LinearGradient>
+            </View>
           </TouchableOpacity>
-          <View style={styles.vNoAcc}>
-            <Text style={styles.txtNoAcc}>Don't have an account ? </Text>
+          <View style={styles.signUpContainer}>
+            <Text style={styles.signUpText}>Don't have an account?</Text>
             <TouchableOpacity
               onPress={() => props.navigation.navigate("Signup")}
             >
-              <Text style={styles.txtGoSignup}>Signup</Text>
+              <Text style={styles.signUpLink}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-      
     </LinearGradient>
   );
 };
 
-export default Login;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
   },
-  c2: {
+  contentContainer: {
+    width: "80%",
     alignItems: "center",
-    width: "100%",
-    flex: 1,
-    justifyContent: "center",
   },
-  loginTextGradient: {
-    marginBottom: 25,
-  },
-  txtW: {
-    fontSize: 55,
+  title: {
+    fontSize: 40,
     fontWeight: "bold",
     marginTop: 20,
     marginBottom: 30,
-    
-    // Set text color to white for better contrast
     color: "white",
   },
-  txtV: {
-    fontSize: 40,
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 10,
     color: "#7C4CEC",
     fontWeight: "bold",
   },
-  txtG: {
-    color: "#253660",
-    fontSize: 19,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  c3: {
+  formContainer: {
     backgroundColor: "rgba(255,255,255,0.4)",
-    flex: 1,
     width: "100%",
-    borderTopRightRadius: 110,
-    paddingTop: 100,
+    borderRadius: 20,
+    padding: 20,
     alignItems: "center",
   },
-  txtForgotPswd: {
-    color: "#7A81DC",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  forgotPswdContainer: {
-    alignSelf: "flex-end", // Align to the right
-    marginRight: "10%", // Add some margin to the right
-    marginBottom: 160,
-  },
   input: {
-    width: "80%",
+    width: "100%",
     height: 50,
     borderColor: "rgba(255,255,255,0.3)",
     borderWidth: 1,
-    borderRadius: 50,
-    color:'grey',
-    fontSize:20,
-    paddingHorizontal: 10,
+    borderRadius: 25,
+    color: "grey",
+    fontSize: 18,
+    paddingHorizontal: 20,
     backgroundColor: "rgba(255,255,255,0.3)",
     marginBottom: 20,
-    width: "80%",
   },
   button: {
-    paddingVertical: 12,
-    paddingHorizontal: 30,
+    width: "100%",
+    height: 50,
     borderRadius: 25,
     marginBottom: 20,
-    height: 50,
-    width: "95%",
   },
   buttonGradient: {
-    paddingVertical: 12,
-    paddingHorizontal: 10,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 25,
-    marginBottom: 20,
-    fontWeight:'bold',
-    fontSize:20,
-    height: 50,
-    width: "100%",
+    backgroundColor: "#7C4CEC",
   },
   buttonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
-    textAlign: "center",
+    
   },
-  vNoAcc: {
+  
+  signUpContainer: {
     flexDirection: "row",
     justifyContent: "center",
   },
-  txtGoSignup: {
-    color: "#7C4CEC",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  txtNoAcc: {
+  signUpText: {
     color: "grey",
     fontWeight: "bold",
     fontSize: 16,
   },
+  signUpLink: {
+    color: "#7C4CEC",
+    fontWeight: "bold",
+    fontSize: 16,
+    marginLeft: 5,
+  },
 });
+
+export default Login;

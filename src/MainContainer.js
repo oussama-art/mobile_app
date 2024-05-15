@@ -2,7 +2,7 @@ import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import Home from './screens/Home';
-import AddPost from './screens/AddPost';
+import List_resrvation from './screens/list_resrvation';
 import Profile from './screens/Profile';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
@@ -23,7 +23,7 @@ const MainContainer = () => {
         initialRouteName="Home"
         activeColor="white"
         inactiveColor="white"
-        barStyle={{backgroundColor:'gray'}}
+        barStyle={{backgroundColor:'blue'}}
       >
         <Tab.Screen
           name="Home"
@@ -31,16 +31,16 @@ const MainContainer = () => {
         
           options={{
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons name="home" color={focused ? "white" : "white"} size={26} />
+              <MaterialCommunityIcons name="home" color={focused ? "black" : "white"} size={26} />
             ),
           }}
         />
         <Tab.Screen
           name="reservation"
-          component={AddPost} 
+          component={List_resrvation} 
           options={{
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons name="plus-circle" color={focused ? "white" : "white"} size={26} />
+              <MaterialCommunityIcons name="plus-circle" color={focused ? "black" : "white"} size={26} />
             ),
           }}
         />
@@ -49,7 +49,7 @@ const MainContainer = () => {
           component={Profile}
           options={{
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons name="account" color={focused ? "white" : "white"} size={26} />
+              <MaterialCommunityIcons name="account" color={focused ? "black" : "white"} size={26} />
             ),
           }}
         />
@@ -61,7 +61,7 @@ const MainContainer = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'gray',
+    backgroundColor:'black',
 
   },
   headerContainer: {
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    color: '#FFFFFF',
+    color: 'white',
     fontSize: 27,
     fontWeight: 'bold',
     paddingTop:20,

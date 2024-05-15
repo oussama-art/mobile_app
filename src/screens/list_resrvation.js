@@ -10,7 +10,7 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import { LinearGradient } from "expo-linear-gradient";
 
-const AddPost = () => {
+const List_resrvation = () => {
   const [postName, setPostName] = useState("");
   const [postContent, setPostContent] = useState("");
   const [postTags, setPostTags] = useState("");
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddPost;
+export default List_resrvation;
