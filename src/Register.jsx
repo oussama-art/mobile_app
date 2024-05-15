@@ -13,18 +13,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
 import * as SecureStore from 'expo-secure-store';
-async function save(value) {
-  await SecureStore.setItemAsync('secure_token', value);
-}
 
-async function getValueFor() {
-  let result = await SecureStore.getItemAsync('secure_token');
-  if (result) {
-    alert("🔐 Here's your value 🔐 \n" + result);
-  } else {
-    alert('No values stored under that key.');
-  }
-}
 export default function Signup(props) {
 
   const savetoken = async (token )=>{
@@ -74,11 +63,8 @@ export default function Signup(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        console.log(data.token);
 
         if (data.token) {
-          savetoken(data.token);
           gettoken()
           .then(token => {
             console.log(token); // daba rah tiji token 
