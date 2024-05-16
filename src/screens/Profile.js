@@ -7,6 +7,7 @@ import { Picker } from "@react-native-picker/picker";
 import BottomPopup from "./BottomPopup"; // Corrected import
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
+import { BASE_URL } from "../Config";
 
 const Profile = () => {
   const [popupVisible, setPopupVisible] = useState(false);
@@ -40,7 +41,7 @@ const Profile = () => {
 
                 
   const user_info = () => {
-    fetch("http://192.168.1.5:8085/api/users/mycompte", {
+    fetch(BASE_URL+"/users/mycompte", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -65,6 +66,7 @@ const Profile = () => {
         const storedToken = await SecureStore.getItemAsync('secure_token');
         if (storedToken) {
           setToken(storedToken);
+          console.log(token)  // show
           user_info();
         } else {
           navigation.reset({

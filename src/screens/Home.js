@@ -9,6 +9,7 @@ import {
   FlatList,
   Button,
 } from "react-native";
+import { BASE_URL } from "../Config";
 
 const { width } = Dimensions.get("window");
 
@@ -17,7 +18,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch voyages from your backend API
-    fetch("http://192.168.1.5:8085/api/Voyage")
+    fetch(BASE_URL+"/Voyage")
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.map((voyage) => ({
@@ -59,7 +60,7 @@ const Home = ({ navigation }) => {
             >
               <Text style={styles.voyageName}>{item.name}</Text>
               <Image
-                source={{ uri: `http://192.168.1.5:8085/api/images/${item.image}` }}
+                source={{ uri: `${BASE_URL}/images/${item.image}` }}
                 style={styles.image}
               />
               <Text style={styles.label}>Description:</Text>

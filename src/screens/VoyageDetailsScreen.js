@@ -1,6 +1,7 @@
 // VoyageDetailsScreen.js
 import React from 'react';
 import { View, Text, Image, Button, StyleSheet } from 'react-native';
+import { BASE_URL } from "../Config";
 
 const VoyageDetailsScreen = ({ navigation, route }) => {
   const { voyage } = route.params;
@@ -13,7 +14,7 @@ const VoyageDetailsScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <View style={styles.card}>
         <Image
-          source={{ uri: `http://192.168.1.5:8085/api/images/${voyage.image}` }}
+          source={{ uri: `${BASE_URL}/images/${voyage.image}` }}
           style={styles.image}
         />
         <View style={styles.content}>

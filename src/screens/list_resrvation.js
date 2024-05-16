@@ -11,6 +11,7 @@ import { Picker } from "@react-native-picker/picker";
 import { LinearGradient } from "expo-linear-gradient";
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
+import { BASE_URL } from "../Config";
 
 const List_reservation = () => {
   const [token, setToken] = useState(null);

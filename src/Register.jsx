@@ -15,7 +15,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
-
+import { BASE_URL } from "./Config";
 export default function Signup(props) {
   const navigation = useNavigation();
 
@@ -62,7 +62,7 @@ export default function Signup(props) {
     formData.append('firstname', firstName);
     formData.append('lastname', lastName);
      
-    fetch("http://192.168.1.18:8085/api/auth/register", {
+    fetch(BASE_URL+"/auth/register", {
       method: "POST",
       body: formData,
     })
