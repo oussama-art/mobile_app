@@ -36,36 +36,13 @@ const Profile = () => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  
-
-                
-  const user_info = () => {
-    fetch("http://192.168.1.5:8085/api/users/mycompte", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("User Info:", data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user info:", error);
-      });
-  };
-                
   useEffect(() => {
     const getToken = async () => {
       try {
         const storedToken = await SecureStore.getItemAsync('secure_token');
         if (storedToken) {
           setToken(storedToken);
-          user_info();
+          
         } else {
           navigation.reset({
             index: 0,
@@ -88,6 +65,29 @@ const Profile = () => {
   if (!token) {
     return null; // or a loading spinner
   }
+
+                
+  const user_info = () => {
+    fetch("http://192.168.1.5:8085/api/users/mycompte", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("User Info:", data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user info:", error);
+      });
+  };
+  user_info();    
+ 
   const user = {
     username: "JohnDoe",
     email: "user@gmail.com",

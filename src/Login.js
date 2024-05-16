@@ -15,7 +15,7 @@ const Login = () => {
   };
 
   const handleSubmit = () => {
-    fetch("http://192.168.1.110:8085/api/auth/authenticate", {
+    fetch("http://192.168.1.5:8085/api/auth/authenticate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

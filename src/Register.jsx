@@ -62,7 +62,7 @@ export default function Signup(props) {
     formData.append('firstname', firstName);
     formData.append('lastname', lastName);
      
-    fetch("http://192.168.1.18:8085/api/auth/register", {
+    fetch("http://192.168.1.5:8085/api/auth/register", {
       method: "POST",
       body: formData,
     })
