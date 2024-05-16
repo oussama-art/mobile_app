@@ -9,16 +9,63 @@ import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 
 const Profile = () => {
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [pickerValue, setPickerValue] = useState("edit");
+  const deleteToken = async () => {
+    await SecureStore.deleteItemAsync('secure_token');
+    navigation.navigate("Login"); // Navigate to login screen
+  };
+  const togglePopup = (post) => {
+    setSelectedPost(post);
+    setPopupVisible(!popupVisible);
+  };
+
+  const handleEditAction = () => {
+    // Implement edit post functionality
+    setPickerVisible(false);
+  };
+
+  const handleDeleteAction = () => {
+    // Implement delete post functionality
+    setPickerVisible(false);
+  };
+  
   const navigation = useNavigation();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  
+
+                
+  const user_info = () => {
+    fetch("http://192.168.1.5:8085/api/users/mycompte", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("User Info:", data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user info:", error);
+      });
+  };
+                
   useEffect(() => {
     const getToken = async () => {
       try {
         const storedToken = await SecureStore.getItemAsync('secure_token');
         if (storedToken) {
           setToken(storedToken);
+          user_info();
         } else {
           navigation.reset({
             index: 0,
@@ -89,28 +136,7 @@ const Profile = () => {
     ],
   };
 
-  const [popupVisible, setPopupVisible] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [pickerVisible, setPickerVisible] = useState(false);
-  const [pickerValue, setPickerValue] = useState("edit");
-  const deleteToken = async () => {
-    await SecureStore.deleteItemAsync('secure_token');
-    navigation.navigate("Login"); // Navigate to login screen
-  };
-  const togglePopup = (post) => {
-    setSelectedPost(post);
-    setPopupVisible(!popupVisible);
-  };
-
-  const handleEditAction = () => {
-    // Implement edit post functionality
-    setPickerVisible(false);
-  };
-
-  const handleDeleteAction = () => {
-    // Implement delete post functionality
-    setPickerVisible(false);
-  };
+  
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -324,16 +350,6 @@ const styles = StyleSheet.create({
   pickerButtonText: {
     color: "#fff",
   },
-  btnlog:{
-    backgroundColor:'gray',
-    borderRadius:20,
-    padding:10
-
-  },textbtnlog:{
-    color:'white',
-    fontSize:20,
-    margin:'auto',
-  }
 });
 
 export default Profile;
