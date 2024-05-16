@@ -1,12 +1,46 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import Icons from "react-native-vector-icons/EvilIcons";
 import { Picker } from "@react-native-picker/picker";
 import BottomPopup from "./BottomPopup"; // Corrected import
+import * as SecureStore from 'expo-secure-store';
+import { useNavigation } from '@react-navigation/native';
 
 const Profile = () => {
+  const navigation = useNavigation();
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getToken = async () => {
+      try {
+        const storedToken = await SecureStore.getItemAsync('secure_token');
+        if (storedToken) {
+          setToken(storedToken);
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Login' }],
+          });
+        }
+      } catch (error) {
+        console.error('Failed to get token', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getToken();
+  }, [navigation]);
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (!token) {
+    return null; // or a loading spinner
+  }
   const user = {
     username: "JohnDoe",
     email: "user@gmail.com",
@@ -59,7 +93,10 @@ const Profile = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [pickerVisible, setPickerVisible] = useState(false);
   const [pickerValue, setPickerValue] = useState("edit");
-
+  const deleteToken = async () => {
+    await SecureStore.deleteItemAsync('secure_token');
+    navigation.navigate("Login"); // Navigate to login screen
+  };
   const togglePopup = (post) => {
     setSelectedPost(post);
     setPopupVisible(!popupVisible);
@@ -74,7 +111,6 @@ const Profile = () => {
     // Implement delete post functionality
     setPickerVisible(false);
   };
-
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -92,6 +128,11 @@ const Profile = () => {
             <Text style={styles.userInfoText}>{user.email}</Text>
           </View>
         </View>
+        <TouchableOpacity style={styles.btnlog} onPress={deleteToken}>
+          <Text style={styles.textbtnlog}>
+            Log out
+          </Text>
+        </TouchableOpacity>
         <View style={styles.postsContainer}>
           {user.posts.map((post) => (
             <View key={post.id} style={styles.postContainer}>
@@ -283,6 +324,16 @@ const styles = StyleSheet.create({
   pickerButtonText: {
     color: "#fff",
   },
+  btnlog:{
+    backgroundColor:'gray',
+    borderRadius:20,
+    padding:10
+
+  },textbtnlog:{
+    color:'white',
+    fontSize:20,
+    margin:'auto',
+  }
 });
 
 export default Profile;

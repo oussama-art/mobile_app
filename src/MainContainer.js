@@ -9,13 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as SecureStore from 'expo-secure-store';
 
 const Tab = createMaterialBottomTabNavigator();
-const gettoken = async()=>{
-  return await SecureStore.getItemAsync('secure_token');
-}
-          gettoken()
-          .then(token => {
-            console.log(token); // daba rah tiji token 
-          });
+
 const MainContainer = () => {
   const Header = () => (
       <View style={styles.header}>

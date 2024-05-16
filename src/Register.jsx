@@ -13,12 +13,16 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
 import * as SecureStore from 'expo-secure-store';
+import { useNavigation } from '@react-navigation/native';
+import AntDesignIcon from "react-native-vector-icons/AntDesign";
 
 export default function Signup(props) {
+  const navigation = useNavigation();
 
   const savetoken = async (token )=>{
-    await SecureStore.setItemAsync('secure_token',token);
+    await SecureStore.setItemAsync('secure_token', token);
   }
+  
   const gettoken = async()=>{
     return await SecureStore.getItemAsync('secure_token');
   }
@@ -48,6 +52,7 @@ export default function Signup(props) {
       console.error("Error picking image:", error);
     }
   };
+
   function handleSubmit(e) {
     e.preventDefault();
   
@@ -57,7 +62,7 @@ export default function Signup(props) {
     formData.append('firstname', firstName);
     formData.append('lastname', lastName);
      
-    fetch("http://192.168.1.10:8085/api/auth/register", {
+    fetch("http://192.168.1.18:8085/api/auth/register", {
       method: "POST",
       body: formData,
     })
@@ -65,11 +70,7 @@ export default function Signup(props) {
       .then((data) => {
 
         if (data.token) {
-          gettoken()
-          .then(token => {
-            console.log(token); // daba rah tiji token 
-          });
-          
+          savetoken(data.token);
           props.navigation.navigate("MainContainer");
         } else {
           console.log(data.message);
@@ -77,7 +78,12 @@ export default function Signup(props) {
       })
       .catch((error) => console.log(error));
   }
-  
+  const home=()=>{
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainContainer' }],
+    });
+  }
   return (
     <LinearGradient colors={["#7C4CEC", "#FFFFFF"]} style={styles.container}>
       <KeyboardAvoidingView
@@ -85,8 +91,13 @@ export default function Signup(props) {
         behavior={Platform.OS === "ios" ? "padding" : null}
         keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}
       >
+
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.txtW}>Register</Text>
+        <TouchableOpacity style={styles.back} onPress={home}>
+      <AntDesignIcon name="home" color="white" size={45} />
+      </TouchableOpacity>
+          <Text style={styles.txtW}>R
+          egister</Text>
           <View style={styles.c3}>
             <Text style={styles.txtV}>Create an Account</Text>
             <Text style={styles.txtG}>Please fill in the details below</Text>
@@ -240,4 +251,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  back:{
+    position:'absolute',
+    left:10,
+    top:40,
+    backgroundColor:'rgba(0, 0, 25, 0.2)',
+    borderRadius:10,
+    padding:10
+  }
 });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,21 +9,46 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { LinearGradient } from "expo-linear-gradient";
+import * as SecureStore from 'expo-secure-store';
+import { useNavigation } from '@react-navigation/native';
 
-const List_resrvation = () => {
+const List_reservation = () => {
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [postName, setPostName] = useState("");
   const [postContent, setPostContent] = useState("");
   const [postTags, setPostTags] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [imageLink, setImageLink] = useState("");
+  const navigation = useNavigation();
 
-  // Define your list of categories
+  useEffect(() => {
+    const getToken = async () => {
+      try {
+        const storedToken = await SecureStore.getItemAsync('secure_token');
+        if (storedToken) {
+          setToken(storedToken);
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Login' }],
+          });
+        }
+      } catch (error) {
+        console.error('Failed to get token', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getToken();
+  }, [navigation]);
+
   const categories = [
     "Category 1",
     "Category 2",
     "Category 3",
     "Category 4",
-    // Add more categories as needed
   ];
 
   const handleAddPost = () => {
@@ -33,6 +58,14 @@ const List_resrvation = () => {
     console.log("Selected category:", selectedCategory);
     console.log("Image link:", imageLink);
   };
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (!token) {
+    return null; // or a loading spinner
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -63,11 +96,10 @@ const List_resrvation = () => {
       />
       <View style={styles.categoryContainer}>
         <Text style={styles.label}>Select Category:</Text>
-        {/* Dropdown list of categories */}
         <Picker
           selectedValue={selectedCategory}
           style={styles.categoryPicker}
-          onValueChange={(itemValue, itemIndex) =>
+          onValueChange={(itemValue) =>
             setSelectedCategory(itemValue)
           }
         >
@@ -80,8 +112,8 @@ const List_resrvation = () => {
         <LinearGradient
           colors={["#54B5F4", "#7C4CEC"]}
           style={styles.buttonGradient}
-          start={{ x: 0, y: 0 }} // From left
-          end={{ x: 1, y: 0 }} // To right
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
         >
           <Text style={styles.addButtonLabel}>Add Post</Text>
         </LinearGradient>
@@ -105,7 +137,6 @@ const styles = StyleSheet.create({
   },
   categoryContainer: {
     marginBottom: 20,
-    color: "red",
   },
   label: {
     marginBottom: 5,
@@ -114,7 +145,7 @@ const styles = StyleSheet.create({
   },
   categoryPicker: {
     borderWidth: 1,
-    borderColor: "balck",
+    borderColor: "black",
     borderRadius: 5,
     backgroundColor: "white",
     color: "gray",
@@ -122,16 +153,14 @@ const styles = StyleSheet.create({
   addButton: {
     borderRadius: 25,
     height: 100,
-
-
   },
   buttonGradient: {
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderRadius: 25,
     marginBottom: 20,
-    fontWeight:'bold',
-    fontSize:20,
+    fontWeight: 'bold',
+    fontSize: 20,
     height: 50,
     width: "100%",
   },
@@ -143,4 +172,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default List_resrvation;
+export default List_reservation;
