@@ -45,20 +45,7 @@ const List_reservation = () => {
     getToken();
   }, [navigation]);
 
-  const categories = [
-    "Category 1",
-    "Category 2",
-    "Category 3",
-    "Category 4",
-  ];
 
-  const handleAddPost = () => {
-    console.log("Post name:", postName);
-    console.log("Post content:", postContent);
-    console.log("Post tags:", postTags);
-    console.log("Selected category:", selectedCategory);
-    console.log("Image link:", imageLink);
-  };
 
   if (loading) {
     return <Text>Loading...</Text>;

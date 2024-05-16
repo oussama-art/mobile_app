@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Dimensions,
   FlatList,
   Button,
+  RefreshControl,
 } from "react-native";
 import { BASE_URL } from "../Config";
 
@@ -15,10 +16,10 @@ const { width } = Dimensions.get("window");
 
 const Home = ({ navigation }) => {
   const [voyages, setVoyages] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    // Fetch voyages from your backend API
-    fetch(BASE_URL+"/Voyage")
+  const fetchVoyages = useCallback(() => {
+    fetch(BASE_URL + "/Voyage")
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.map((voyage) => ({
@@ -26,11 +27,20 @@ const Home = ({ navigation }) => {
           date_debut: formatDate(voyage.date_debut),
           date_fin: formatDate(voyage.date_fin),
         }));
-        setVoyages(formattedData); // Update state with fetched voyages
-        console.log(data);
+        setVoyages(formattedData);
       })
       .catch((error) => console.error("Error fetching voyages: ", error));
-  }, []); // Empty dependency array ensures useEffect runs only once on component mount
+  }, []);
+
+  useEffect(() => {
+    fetchVoyages();
+  }, [fetchVoyages]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchVoyages();
+    setRefreshing(false);
+  };
 
   // Function to format date in "year-month-day" format
   const formatDate = (timestamp) => {
@@ -76,6 +86,9 @@ const Home = ({ navigation }) => {
             />
           </View>
         )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );
