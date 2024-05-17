@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Button } from "react-native";
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
-import { useIsFocused } from '@react-navigation/native'; // Import useIsFocused hook
+import { useIsFocused } from '@react-navigation/native';
 import { BASE_URL } from "../Config";
 
 const List_reservation = () => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState([]);
+  const [error, setError] = useState(null);
   const navigation = useNavigation();
-  const isFocused = useIsFocused(); // Use isFocused hook to determine if the component is focused
+  const isFocused = useIsFocused();
 
   const fetchData = async () => {
     try {
@@ -34,9 +35,7 @@ const List_reservation = () => {
       }
       const reservationsData = await res.json();
       setReservations(reservationsData);
-      console.log("reservations", reservations)
 
-      // Fetch details of associated voyages for each reservation
       const voyagesPromises = reservationsData.map(async (reservation) => {
         const voyageRes = await fetch(`${BASE_URL}/Voyage/${reservation.voyage}`);
         if (!voyageRes.ok) {
@@ -48,35 +47,48 @@ const List_reservation = () => {
       const resolvedVoyages = await Promise.all(voyagesPromises);
       setReservations(resolvedVoyages);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (isFocused) { // Refetch reservations data when the component is focused
+    if (isFocused) {
       fetchData();
     }
-  }, [isFocused]); // Add isFocused to the dependency array
+  }, [isFocused]);
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error: {error}</Text>
+        <Button title="Retry" onPress={fetchData} />
+      </View>
+    );
   }
 
   if (!token) {
-    return null; // or a loading spinner
+    return null;
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
         <Text style={styles.title}>List of Reservations</Text>
-        {/* Display reservations and associated voyage details */}
         {reservations.map((reservation) => (
-          <View key={reservation.id}>
-            <Text>Voyage: {reservation.voyage.name}</Text>
-            {/* Display other reservation details as needed */}
+          <View key={reservation.id} style={styles.reservationContainer}>
+            <Text style={styles.reservationText}>Voyage: {reservation.voyage.name}</Text>
+            {/* Add more reservation details here */}
           </View>
         ))}
       </View>
@@ -85,17 +97,49 @@ const List_reservation = () => {
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    backgroundColor: '#f8f8f8',
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 18,
+    marginBottom: 10,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  reservationContainer: {
+    padding: 15,
+    marginBottom: 10,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  reservationText: {
+    fontSize: 18,
   },
 });
 
