@@ -42,14 +42,11 @@ export default function Signup(props) {
         quality: 1,
       });
   
-      console.log("ImagePicker result:", result);
   
       if (!result.canceled) {
         setImage(result.assets[0].uri);
-        console.log("Image URI:", result.assets[0].uri);
       }
     } catch (error) {
-      console.error("Error picking image:", error);
     }
   };
 

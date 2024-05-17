@@ -31,7 +31,6 @@ const Login = () => {
     
        )
     .then(data => {
-      console.log(data)
       if (data.token) {
         setToken(data.token);
         navigation.reset({

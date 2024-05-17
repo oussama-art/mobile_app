@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
             username, email, password
         }).then(res => {
             let userInfo = res.data;
-            console.log(userInfo);
         }).catch(e => {
             console.log(`register error: ${e}`);
         });
