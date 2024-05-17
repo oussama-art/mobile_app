@@ -4,7 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
-
+import { BASE_URL } from "./Config";
 const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
@@ -15,7 +15,9 @@ const Login = () => {
   };
 
   const handleSubmit = () => {
-    fetch("http://192.168.1.5:8085/api/auth/authenticate", {
+
+    fetch(BASE_URL+"/auth/authenticate", {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",

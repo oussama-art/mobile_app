@@ -5,8 +5,6 @@ import Home from './screens/Home';
 import List_resrvation from './screens/list_resrvation';
 import Profile from './screens/Profile';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { LinearGradient } from "expo-linear-gradient";
-import * as SecureStore from 'expo-secure-store';
 
 const Tab = createMaterialBottomTabNavigator();
 

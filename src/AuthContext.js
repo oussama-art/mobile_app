@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
             console.log(`register error: ${e}`);
         });
     };
-
     return (
         <AuthContext.Provider value={{ register }}>
             {children}
