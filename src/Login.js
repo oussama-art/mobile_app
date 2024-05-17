@@ -76,7 +76,7 @@ const Login = () => {
             onPress={() => navigation.navigate("ForgotPassword")}
             style={styles.forgotPasswordButton}
           >
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+            
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <View style={styles.buttonGradient}>

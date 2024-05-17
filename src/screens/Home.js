@@ -141,6 +141,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
   },
+  voyageImage: {
+    width: 200,
+    height: 150,
+    resizeMode: 'cover',
+    borderRadius: 10,
+  },
 });
 
 export default Home;

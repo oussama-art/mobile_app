@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView,Image } from "react-native";
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native'; // Import useIsFocused hook
@@ -75,9 +75,12 @@ const List_reservation = () => {
         {/* Display reservations and associated voyage details */}
         {reservations.map((reservation) => (
           <View key={reservation.id}>
-            <Text>Voyage: {reservation.voyage.name}</Text>
-            {/* Display other reservation details as needed */}
+            <Text style={styles.reservationTitle}>Reservation Date: {new Date(reservation.date[0], reservation.date[1] - 1, reservation.date[2], reservation.date[3], reservation.date[4], reservation.date[5]).toLocaleDateString()}</Text>
+            <Text style={styles.reservationTitle}>Voyage: {reservation.voyage.name}</Text>
+            <Text style={styles.voyagePrice}>Price: {reservation.voyage.prix}</Text>
+            
           </View>
+          
         ))}
       </View>
     </ScrollView>
@@ -93,6 +96,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  reservationTitle:{
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  voyagePrice: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,

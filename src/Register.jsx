@@ -127,15 +127,15 @@ export default function Signup(props) {
               onChangeText={setLastName}
             />
             <TouchableOpacity style={styles.button} onPress={pickImage}>
-              <Text style={styles.buttonText}>Pick Image</Text>
+             
             </TouchableOpacity>
             {image && <Image source={{ uri: image }} style={styles.image} />}
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <LinearGradient
                 colors={["#54B5F4", "#7C4CEC"]}
                 style={styles.buttonGradient}
-                start={{ x: 0, y: 0 }} // From left
-                end={{ x: 1, y: 0 }} // To right
+                start={{ x: 0, y: 0 }} 
+                end={{ x: 1, y: 0 }} 
               >
                 <Text style={styles.buttonText}>Register</Text>
               </LinearGradient>
